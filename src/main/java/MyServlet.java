@@ -26,12 +26,13 @@ public class MyServlet extends HttpServlet {
             while ((line = reader.readLine()) != null)
                 jb.append(line);
             JSONObject jsonObject = new JSONObject(jb.toString());
+            DBconnector db= new DBconnector();
+            db.add(jsonObject.getString("name"),jsonObject.getDouble("lat"),
+                    jsonObject.getDouble("long"),jsonObject.getString("description"));
             out.println(jsonObject);
         } catch (Exception e) {
             out.println(e.getMessage());
         }
-
-
     }
 
     @Override

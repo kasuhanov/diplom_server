@@ -22,7 +22,7 @@ public class DBconnector {
     public void add(String name, double Lat, double Long, String description)throws SQLException{
         dbcon = this.getDBConnection();
         int ID =3;
-        int checked =0;
+        int checked =1;
         statement = dbcon.createStatement();
         String insertTableSQL = "INSERT INTO JLAB.diplom"
                 + "( name, lat,long, description , checked) " + "VALUES"
