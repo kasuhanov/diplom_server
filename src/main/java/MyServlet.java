@@ -38,10 +38,15 @@ public class MyServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
 
-        DBconnector db= new DBconnector();
-        out.println(db.getJson().toString());
+        if(request.getParameter("par").equals("marks")) {
+            DBconnector db = new DBconnector();
+            out.println(db.getJson().toString());
+        }  else {
+            out.println("parameter error");
+        }
     }
 }
