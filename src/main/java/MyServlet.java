@@ -20,19 +20,24 @@ public class MyServlet extends HttpServlet {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
         StringBuffer jb = new StringBuffer();
-        String line = null;
-        try {
-            BufferedReader reader = request.getReader();
-            while ((line = reader.readLine()) != null)
-                jb.append(line);
-            JSONObject jsonObject = new JSONObject(jb.toString());
-            DBconnector db= new DBconnector();
-            db.add(jsonObject.getString("name"),jsonObject.getDouble("lat"),
-                    jsonObject.getDouble("long"),jsonObject.getString("description"));
-            out.println(jsonObject);
-        } catch (Exception e) {
-            out.println(e.getMessage());
+        if(request.getParameter("par").equals("addmark")) {
+            String line = null;
+            try {
+                BufferedReader reader = request.getReader();
+                while ((line = reader.readLine()) != null)
+                    jb.append(line);
+                JSONObject jsonObject = new JSONObject(jb.toString());
+                DBconnector db= new DBconnector();
+                db.add(jsonObject.getString("name"),jsonObject.getDouble("lat"),
+                        jsonObject.getDouble("long"),jsonObject.getString("description"));
+                out.println(jsonObject);
+            } catch (Exception e) {
+                out.println(e.getMessage());
+            }
+        }  else {
+            out.println("parameter error");
         }
+
     }
 
     @Override
