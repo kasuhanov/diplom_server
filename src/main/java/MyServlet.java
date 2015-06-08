@@ -35,7 +35,22 @@ public class MyServlet extends HttpServlet {
                 out.println(e.getMessage());
             }
         }  else {
-            out.println("parameter error");
+            if(request.getParameter("par").equals("addimage")) {
+                String line = null;
+                try {
+                    BufferedReader reader = request.getReader();
+                    while ((line = reader.readLine()) != null)
+                        jb.append(line);
+                    JSONObject jsonObject = new JSONObject(jb.toString());
+                    DBconnector db= new DBconnector();
+                    db.addImage(jsonObject.getInt("id"), jsonObject.getString("image"));
+                    out.println(jsonObject);
+                } catch (Exception e) {
+                    out.println(e.getMessage());
+                }
+            }else {
+                out.println("parameter error");
+            }
         }
 
     }
@@ -52,6 +67,10 @@ public class MyServlet extends HttpServlet {
             out.println(db.getJson().toString());
         }  else {
             out.println("parameter error");
+            //DBconnector db = new DBconnector();
+            //db.addUser("usa","pas");
+            //if(db.login("usa","padfas"))System.out.println("usa logged");
+            //if(db.login("usa","pas"))System.out.println("kusa logged");
         }
     }
 }

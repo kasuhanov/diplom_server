@@ -91,4 +91,44 @@ public class DBconnector {
         }
 
     }
+    public void addImage(int id, String image)throws SQLException{
+        dbcon = this.getDBConnection();
+        statement = dbcon.createStatement();
+        String insertTableSQL = "INSERT INTO JLAB.image_table"
+                + "( mark_id, image) " + "VALUES"
+                + "('"+id+"', '"+image+"')";
+        //+ "('"+ID+"', '"+name+"', '"+Lat+"', '"+Long+"', '"+description+"', '"+checked+"')";
+        statement.executeUpdate(insertTableSQL);
+    }
+    public void addUser(String Login, String Password){
+        try {
+
+                dbcon = this.getDBConnection();
+                statement = dbcon.createStatement();
+                String insertTableSQL = "INSERT INTO JLAB.user_table"
+                        + "( login, password) " + "VALUES"
+                        + "('"+Login+"', '"+Password+"')";
+                statement.executeUpdate(insertTableSQL);
+
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+
+        }
+    }
+    public boolean login(String Login, String Password){
+        String selectTableSQL = "SELECT *  FROM jlab.user_table WHERE login ='"+Login+"' AND password='"+Password+"'";
+
+        try {
+            dbcon = this.getDBConnection();
+            statement = dbcon.createStatement();
+            ResultSet rs = statement.executeQuery(selectTableSQL);
+            if(rs.next()) {
+                return true;
+            } else return false;
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+
 }
