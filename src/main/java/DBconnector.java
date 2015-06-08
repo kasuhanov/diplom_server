@@ -21,12 +21,15 @@ public class DBconnector {
     }
     public void add(String name, double Lat, double Long, String description)throws SQLException{
         dbcon = this.getDBConnection();
-        int ID =3;
+        int ID =getLastID();
+        if(ID==0){return;}else ID++;
+        //String selectTableSQL = "SELECT max(id)  FROM jlab.diplom";
+
         int checked =1;
         statement = dbcon.createStatement();
         String insertTableSQL = "INSERT INTO JLAB.diplom"
-                + "( name, lat,long, description , checked) " + "VALUES"
-                + "('"+name+"', '"+Lat+"', '"+Long+"', '"+description+"', '"+checked+"')";
+                + "( mark_id,name, lat,long, description , checked) " + "VALUES"
+                + "('"+ID+"', '"+name+"', '"+Lat+"', '"+Long+"', '"+description+"', '"+checked+"')";
                 //+ "('"+ID+"', '"+name+"', '"+Lat+"', '"+Long+"', '"+description+"', '"+checked+"')";
         statement.executeUpdate(insertTableSQL);
 
@@ -53,6 +56,7 @@ public class DBconnector {
             obj.put("description", resultSet.getObject(4));
             obj.put("lat", resultSet.getObject(2));
             obj.put("long", resultSet.getObject(3));
+            obj.put("id", resultSet.getInt("mark_id"));
             jsonArray.put(obj);
         }
         return jsonArray;
@@ -68,6 +72,22 @@ public class DBconnector {
         }catch (Exception e){
             System.out.println(e.getMessage());
             return jsonArray;
+        }
+
+    }
+    public int getLastID() {
+        String selectTableSQL = "SELECT max(mark_id)  FROM jlab.diplom";
+
+        try {
+            dbcon = this.getDBConnection();
+            statement = dbcon.createStatement();
+            ResultSet rs = statement.executeQuery(selectTableSQL);
+            if(rs.next()) {
+                return rs.getInt(1);
+            } else return 0;
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return 0;
         }
 
     }
