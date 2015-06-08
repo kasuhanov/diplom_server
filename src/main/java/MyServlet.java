@@ -67,7 +67,17 @@ public class MyServlet extends HttpServlet {
             out.println(db.getJson().toString());
         }  else {
             out.println("parameter error");
+
             //DBconnector db = new DBconnector();
+
+            //System.out.println(db.getMarkComments(1).get(0));
+            //System.out.println(db.getMarkComments(1).get(1));
+            //System.out.println(db.getMarkComments(1).get(2));
+            //System.out.println(db.getMarkComments(3).get(0));
+            //if(db.addComment("usa",1,"sdfsdf"))System.out.println("usa SSSS");
+            //if(db.addComment("usa",112,"comment"))System.out.println("usa 112 logged");
+            //if(db.addComment("kusa",1,"comment"))System.out.println("kusa logged");
+
             //db.addUser("usa","pas");
             //if(db.login("usa","padfas"))System.out.println("usa logged");
             //if(db.login("usa","pas"))System.out.println("kusa logged");

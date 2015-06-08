@@ -2,6 +2,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class DBconnector {
@@ -130,5 +132,83 @@ public class DBconnector {
             return false;
         }
     }
+    public boolean addComment(String login, int markId, String comment){
+        String selectTableSQL = "SELECT *  FROM jlab.user_table WHERE login ='"+login+"'";
 
+        try {
+            dbcon = this.getDBConnection();
+            statement = dbcon.createStatement();
+            ResultSet rs = statement.executeQuery(selectTableSQL);
+            if(rs.next()) {
+                selectTableSQL = "SELECT *  FROM jlab.diplom WHERE mark_id ='"+markId+"'";
+                dbcon = this.getDBConnection();
+                statement = dbcon.createStatement();
+                ResultSet rs2 = statement.executeQuery(selectTableSQL);
+                if(rs2.next()) {
+                    int ID=getCommentId(comment);
+                    if(ID==0)return false;
+                    dbcon = this.getDBConnection();
+                    statement = dbcon.createStatement();
+                    String insertTableSQL = "INSERT INTO JLAB.comment_link"
+                        + "( mark_id, login, comment_id) " + "VALUES"
+                        + "('"+markId+"', '"+login+"', '"+ID+"')";
+                    statement.executeUpdate(insertTableSQL);
+                    return true;
+                } else return false;
+            } else return false;
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+    public int getCommentId(String comment){
+        String selectTableSQL = "SELECT max(comment_id)  FROM jlab.comment";
+
+        try {
+            dbcon = this.getDBConnection();
+            statement = dbcon.createStatement();
+            ResultSet rs = statement.executeQuery(selectTableSQL);
+            if(rs.next()) {
+                int ID = rs.getInt(1);ID++;
+                dbcon = this.getDBConnection();
+                statement = dbcon.createStatement();
+                String insertTableSQL = "INSERT INTO JLAB.comment"
+                        + "( comment_id,comment) " + "VALUES"
+                        + "('"+ID+"','"+comment+"')";
+                statement.executeUpdate(insertTableSQL);
+
+                return rs.getInt(1);
+            } else return 0;
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return 0;
+        }
+    }
+    public List<String> getMarkComments(int markId){
+        List<String> comments= new ArrayList<String>();
+        String selectTableSQL = "SELECT  comment_id FROM jlab.comment_link";
+        int i=0;
+        try {
+            dbcon = this.getDBConnection();
+            statement = dbcon.createStatement();
+            ResultSet rs = statement.executeQuery(selectTableSQL);
+            while (rs.next()) {
+                if (rs.getInt(1)!=0){
+                    selectTableSQL = "SELECT  comment FROM jlab.comment WHERE comment_id='"+rs.getInt(1)+"'";
+                    dbcon = this.getDBConnection();
+                    statement = dbcon.createStatement();
+                    ResultSet rs2 = statement.executeQuery(selectTableSQL);
+                    if (rs2.next()){
+
+                        comments.add(i,rs2.getString(1));
+                        i++;
+                    }
+                }
+            } // return comments;
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+        return comments;
+    }
 }
