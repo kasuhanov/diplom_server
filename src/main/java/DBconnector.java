@@ -3,7 +3,9 @@ import org.json.JSONObject;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class DBconnector {
@@ -184,9 +186,12 @@ public class DBconnector {
             return 0;
         }
     }
-    public List<String> getMarkComments(int markId){
-        List<String> comments= new ArrayList<String>();
-        String selectTableSQL = "SELECT  comment_id FROM jlab.comment_link";
+    private List<String>  users=new ArrayList<String>();
+    private List<String>  comm=new ArrayList<String>();
+    private int iii=0;
+    public Map<String,String> getMarkComments(int markId){
+        Map<String,String> comments= new HashMap<String, String>();
+        String selectTableSQL = "SELECT  comment_id,login FROM jlab.comment_link WHERE mark_id='"+markId+"'";
         int i=0;
         try {
             dbcon = this.getDBConnection();
@@ -200,7 +205,11 @@ public class DBconnector {
                     ResultSet rs2 = statement.executeQuery(selectTableSQL);
                     if (rs2.next()){
 
-                        comments.add(i,rs2.getString(1));
+                        comments.put(rs.getString(2), rs2.getString(1));
+
+                        comm.add( rs2.getString(1));
+                        users.add( rs.getString(2));
+                        iii++;
                         i++;
                     }
                 }
@@ -210,5 +219,16 @@ public class DBconnector {
             return null;
         }
         return comments;
+    }
+
+    public JSONArray getJsonComments(Map<String,String> map){
+        JSONArray jsonArray = new JSONArray();
+        JSONObject obj = new JSONObject();
+        for(int i=0;i<iii;i++) {
+            obj.put(comm.get(i), users.get(i));
+        }
+        //obj.put("map",map);
+        jsonArray.put(obj);
+        return jsonArray;
     }
 }

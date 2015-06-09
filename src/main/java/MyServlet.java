@@ -62,25 +62,23 @@ public class MyServlet extends HttpServlet {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
 
+        if((request.getParameter("par").equals("comments"))) {
+            DBconnector db = new DBconnector();
+            if(request.getIntHeader("id")!=-1)
+                out.println(db.getJsonComments(db.getMarkComments(request.getIntHeader("id"))));
+            //out.println(request.getIntHeader("id"));
+            return;
+        }
         if(request.getParameter("par").equals("marks")) {
             DBconnector db = new DBconnector();
             out.println(db.getJson().toString());
-        }  else {
-            out.println("parameter error");
+            return;
+        }
+        out.println("parameter error");
 
             //DBconnector db = new DBconnector();
 
-            //System.out.println(db.getMarkComments(1).get(0));
-            //System.out.println(db.getMarkComments(1).get(1));
-            //System.out.println(db.getMarkComments(1).get(2));
-            //System.out.println(db.getMarkComments(3).get(0));
-            //if(db.addComment("usa",1,"sdfsdf"))System.out.println("usa SSSS");
-            //if(db.addComment("usa",112,"comment"))System.out.println("usa 112 logged");
-            //if(db.addComment("kusa",1,"comment"))System.out.println("kusa logged");
+            //System.out.println(db.getJsonComments(db.getMarkComments(1)));
 
-            //db.addUser("usa","pas");
-            //if(db.login("usa","padfas"))System.out.println("usa logged");
-            //if(db.login("usa","pas"))System.out.println("kusa logged");
-        }
     }
 }
