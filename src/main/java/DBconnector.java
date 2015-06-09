@@ -179,7 +179,7 @@ public class DBconnector {
                         + "('"+ID+"','"+comment+"')";
                 statement.executeUpdate(insertTableSQL);
 
-                return rs.getInt(1);
+                return ID;
             } else return 0;
         }catch (Exception e){
             System.out.println(e.getMessage());

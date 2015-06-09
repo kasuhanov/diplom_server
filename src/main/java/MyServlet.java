@@ -48,8 +48,8 @@ public class MyServlet extends HttpServlet {
 
                 if(db.addComment(jsonObject.getString("login"), (int) jsonObject.getLong("id"),
                         jsonObject.getString("comment"))){
-                    out.print("comment added");
-                }else out.println("failed");
+                    //out.print("comment added");
+                }//else out.println("failed");
                 return;
             } catch (Exception e) {
                 out.println(e.getMessage());
