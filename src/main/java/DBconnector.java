@@ -224,9 +224,11 @@ public class DBconnector {
     public JSONArray getJsonComments(Map<String,String> map){
         JSONArray jsonArray = new JSONArray();
         JSONObject obj = new JSONObject();
-        for(int i=0;i<iii;i++) {
-            obj.put(comm.get(i), users.get(i));
-        }
+        obj.put("comments",comm);
+        obj.put("users",users);
+        //for(int i=0;i<iii;i++) {
+        //    obj.put(comm.get(i), users.get(i));
+        //}
         //obj.put("map",map);
         jsonArray.put(obj);
         return jsonArray;

@@ -31,27 +31,31 @@ public class MyServlet extends HttpServlet {
                 db.add(jsonObject.getString("name"),jsonObject.getDouble("lat"),
                         jsonObject.getDouble("long"),jsonObject.getString("description"));
                 out.println(jsonObject);
+                return;
             } catch (Exception e) {
                 out.println(e.getMessage());
             }
-        }  else {
-            if(request.getParameter("par").equals("addimage")) {
-                String line = null;
-                try {
-                    BufferedReader reader = request.getReader();
-                    while ((line = reader.readLine()) != null)
-                        jb.append(line);
-                    JSONObject jsonObject = new JSONObject(jb.toString());
-                    DBconnector db= new DBconnector();
-                    db.addImage(jsonObject.getInt("id"), jsonObject.getString("image"));
-                    out.println(jsonObject);
-                } catch (Exception e) {
-                    out.println(e.getMessage());
-                }
-            }else {
-                out.println("parameter error");
+        }
+        if(request.getParameter("par").equals("addcomment")) {
+            String line = null;
+            try {
+                BufferedReader reader = request.getReader();
+
+                while ((line = reader.readLine()) != null)
+                    jb.append(line);
+                JSONObject jsonObject = new JSONObject(jb.toString());
+                DBconnector db= new DBconnector();
+
+                if(db.addComment(jsonObject.getString("login"), (int) jsonObject.getLong("id"),
+                        jsonObject.getString("comment"))){
+                    out.print("comment added");
+                }else out.println("failed");
+                return;
+            } catch (Exception e) {
+                out.println(e.getMessage());
             }
         }
+
 
     }
 
