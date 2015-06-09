@@ -55,6 +55,24 @@ public class MyServlet extends HttpServlet {
                 out.println(e.getMessage());
             }
         }
+        if(request.getParameter("par").equals("login")) {
+            String line = null;
+            try {
+                BufferedReader reader = request.getReader();
+
+                while ((line = reader.readLine()) != null)
+                    jb.append(line);
+                JSONObject jsonObject = new JSONObject(jb.toString());
+                DBconnector db= new DBconnector();
+
+                if(db.login(jsonObject.getString("login"), jsonObject.getString("password"))){
+                    out.print("logged");
+                }else out.println("failed");
+                return;
+            } catch (Exception e) {
+                out.println(e.getMessage());
+            }
+        }
 
 
     }
