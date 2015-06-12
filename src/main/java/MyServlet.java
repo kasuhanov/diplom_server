@@ -115,11 +115,12 @@ public class MyServlet extends HttpServlet {
         }
         if(request.getParameter("par").equals("hotel")) {
             DBconnector db = new DBconnector();
-            //if(!request.getHeader("country").toString().equals(""))
                 out.println(db.getHotels(Integer.parseInt(request.getHeader("country"))).toString());
-
-               // out.println(db.getHotels(request.getHeader("country").toString()).toString());
-           // out.println(request.getHeader("country").toString());
+            return;
+        }
+        if(request.getParameter("par").equals("room")) {
+            DBconnector db = new DBconnector();
+            out.println(db.getRooms(Integer.parseInt(request.getHeader("hotel"))).toString());
             return;
         }
     }

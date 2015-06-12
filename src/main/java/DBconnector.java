@@ -292,4 +292,47 @@ public class DBconnector {
         }
 
     }
+    public JSONArray getRooms(int hotel_id){
+        String selectTableSQL = "SELECT * FROM jlab.hotel_room WHERE hotel_id ="+hotel_id;
+        JSONArray jsonArray = new JSONArray();
+        try{
+            dbcon = this.getDBConnection();
+            statement = dbcon.createStatement();
+            ResultSet rs = statement.executeQuery(selectTableSQL);
+            while (rs.next()) {
+                System.out.println(rs.getInt(1));
+                jsonArray.put(getRoomByID(rs.getInt(1)));
+
+            }
+            return jsonArray;
+        }catch (Exception e){
+            return jsonArray;
+        }
+
+    }
+    public JSONObject getRoomByID(int id){
+        String selectTableSQL = "SELECT *  FROM jlab.room WHERE room_id ="+id;
+        JSONArray jsonArray = new JSONArray();
+        JSONObject obj = new JSONObject();
+        try {
+            dbcon = this.getDBConnection();
+            statement = dbcon.createStatement();
+            ResultSet rs = statement.executeQuery(selectTableSQL);
+            if (rs.next()) {
+
+
+                obj.put("id", rs.getObject(1));
+                obj.put("type", rs.getObject(2));
+                obj.put("date_start", rs.getObject(3));
+                obj.put("date_long", rs.getObject(4));
+                obj.put("description", rs.getObject(5));
+            }
+            return obj;
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return obj;
+        }
+
+    }
+
 }
