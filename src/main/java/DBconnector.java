@@ -220,7 +220,6 @@ public class DBconnector {
         }
         return comments;
     }
-
     public JSONArray getJsonComments(Map<String,String> map){
         JSONArray jsonArray = new JSONArray();
         JSONObject obj = new JSONObject();
@@ -232,5 +231,65 @@ public class DBconnector {
         //obj.put("map",map);
         jsonArray.put(obj);
         return jsonArray;
+    }
+    public JSONArray getCountries(){
+        String selectTableSQL = "SELECT * FROM jlab.country";
+        JSONArray jsonArray = new JSONArray();
+        try{
+            dbcon = this.getDBConnection();
+            statement = dbcon.createStatement();
+            ResultSet rs = statement.executeQuery(selectTableSQL);
+            while (rs.next()) {
+                JSONObject obj = new JSONObject();
+                obj.put("id", rs.getObject(1));
+                obj.put("country", rs.getObject(2));
+                jsonArray.put(obj);
+            }
+            return jsonArray;
+        }catch (Exception e){
+            return jsonArray;
+        }
+
+    }
+    public JSONArray getHotels(int country_id){
+        String selectTableSQL = "SELECT * FROM jlab.hotel_country WHERE country_id ="+country_id;
+        JSONArray jsonArray = new JSONArray();
+        try{
+            dbcon = this.getDBConnection();
+            statement = dbcon.createStatement();
+            ResultSet rs = statement.executeQuery(selectTableSQL);
+            while (rs.next()) {
+                System.out.println(rs.getInt(1));
+                jsonArray.put(getHotelByID(rs.getInt(1)));
+
+            }
+            return jsonArray;
+        }catch (Exception e){
+            return jsonArray;
+        }
+
+    }
+    public JSONObject getHotelByID(int id){
+        String selectTableSQL = "SELECT *  FROM jlab.hotel WHERE hotel_id ="+id;
+        JSONArray jsonArray = new JSONArray();
+        JSONObject obj = new JSONObject();
+        try {
+            dbcon = this.getDBConnection();
+            statement = dbcon.createStatement();
+            ResultSet rs = statement.executeQuery(selectTableSQL);
+            if (rs.next()) {
+
+
+                    obj.put("id", rs.getObject(1));
+                    obj.put("name", rs.getObject(2));
+                    obj.put("description", rs.getObject(3));
+                    obj.put("star", rs.getObject(4));
+            }
+            return obj;
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return obj;
+        }
+
     }
 }

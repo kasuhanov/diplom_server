@@ -1,4 +1,3 @@
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.servlet.ServletException;
@@ -6,9 +5,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 
 
 @WebServlet("/")
@@ -73,7 +70,22 @@ public class MyServlet extends HttpServlet {
                 out.println(e.getMessage());
             }
         }
+        if(request.getParameter("par").equals("addimage")) {
+            String line = null;
+            try {
+                BufferedReader reader = request.getReader();
 
+                while ((line = reader.readLine()) != null)
+                    jb.append(line);
+                //JSONObject jsonObject = new JSONObject(jb.toString());
+                //DBconnector db= new DBconnector();
+                System.out.println(jb.toString());
+                    out.println(jb.toString());
+                return;
+            } catch (Exception e) {
+                out.println(e.getMessage());
+            }
+        }
 
     }
 
@@ -96,11 +108,19 @@ public class MyServlet extends HttpServlet {
             out.println(db.getJson().toString());
             return;
         }
-        out.println("parameter error");
+        if(request.getParameter("par").equals("countries")) {
+            DBconnector db = new DBconnector();
+            out.println(db.getCountries().toString());
+            return;
+        }
+        if(request.getParameter("par").equals("hotel")) {
+            DBconnector db = new DBconnector();
+            //if(!request.getHeader("country").toString().equals(""))
+                out.println(db.getHotels(Integer.parseInt(request.getHeader("country"))).toString());
 
-            //DBconnector db = new DBconnector();
-
-            //System.out.println(db.getJsonComments(db.getMarkComments(1)));
-
+               // out.println(db.getHotels(request.getHeader("country").toString()).toString());
+           // out.println(request.getHeader("country").toString());
+            return;
+        }
     }
 }
