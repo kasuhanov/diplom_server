@@ -18,6 +18,14 @@ public class DBconnector {
             System.out.println("Error: connector driver is missing");
         }
     }
+    public void close() {
+        try {
+            statement.close();
+            dbcon.close();
+        } catch (SQLException e) {
+            System.out.println("Error: Problem with closing database");
+        }
+    }
     public static  Connection getDBConnection() throws SQLException {
         Connection dbConnection = null;
         dbConnection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "89617898797q");
@@ -63,6 +71,7 @@ public class DBconnector {
             obj.put("id", resultSet.getInt("mark_id"));
             jsonArray.put(obj);
         }
+        resultSet.close();
         return jsonArray;
     }
     public JSONArray getJson() {
@@ -178,9 +187,9 @@ public class DBconnector {
                         + "( comment_id,comment) " + "VALUES"
                         + "('"+ID+"','"+comment+"')";
                 statement.executeUpdate(insertTableSQL);
-
+                rs.close();
                 return ID;
-            } else return 0;
+            } else {rs.close();return 0;}
         }catch (Exception e){
             System.out.println(e.getMessage());
             return 0;
@@ -212,8 +221,11 @@ public class DBconnector {
                         iii++;
                         i++;
                     }
+                    rs2.close();
                 }
-            } // return comments;
+            }
+            rs.close();
+            // return comments;
         }catch (Exception e){
             System.out.println(e.getMessage());
             return null;

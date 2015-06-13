@@ -27,6 +27,7 @@ public class MyServlet extends HttpServlet {
                 DBconnector db= new DBconnector();
                 db.add(jsonObject.getString("name"),jsonObject.getDouble("lat"),
                         jsonObject.getDouble("long"),jsonObject.getString("description"));
+                db.close();
                 out.println(jsonObject);
                 return;
             } catch (Exception e) {
@@ -47,6 +48,7 @@ public class MyServlet extends HttpServlet {
                         jsonObject.getString("comment"))){
                     //out.print("comment added");
                 }//else out.println("failed");
+                db.close();
                 return;
             } catch (Exception e) {
                 out.println(e.getMessage());
@@ -65,6 +67,7 @@ public class MyServlet extends HttpServlet {
                 if(db.login(jsonObject.getString("login"), jsonObject.getString("password"))){
                     out.print("logged");
                 }else out.println("failed");
+                db.close();
                 return;
             } catch (Exception e) {
                 out.println(e.getMessage());
@@ -101,26 +104,31 @@ public class MyServlet extends HttpServlet {
             if(request.getIntHeader("id")!=-1)
                 out.println(db.getJsonComments(db.getMarkComments(request.getIntHeader("id"))));
             //out.println(request.getIntHeader("id"));
+            db.close();
             return;
         }
         if(request.getParameter("par").equals("marks")) {
             DBconnector db = new DBconnector();
             out.println(db.getJson().toString());
+            db.close();
             return;
         }
         if(request.getParameter("par").equals("countries")) {
             DBconnector db = new DBconnector();
             out.println(db.getCountries().toString());
+            db.close();
             return;
         }
         if(request.getParameter("par").equals("hotel")) {
             DBconnector db = new DBconnector();
                 out.println(db.getHotels(Integer.parseInt(request.getHeader("country"))).toString());
+            db.close();
             return;
         }
         if(request.getParameter("par").equals("room")) {
             DBconnector db = new DBconnector();
             out.println(db.getRooms(Integer.parseInt(request.getHeader("hotel"))).toString());
+            db.close();
             return;
         }
     }
